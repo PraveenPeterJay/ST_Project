@@ -58,6 +58,10 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <mutators>
+<!--                        <mutator>DEFAULTS</mutator>-->
+                        <mutator>ALL</mutator>
+                    </mutators>
                     <targetClasses>
                         <param>org.utils.*</param>
                     </targetClasses>
