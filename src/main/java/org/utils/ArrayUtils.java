@@ -402,4 +402,142 @@ public final class ArrayUtils {
             end--;
         }
     }
+    /**
+     * Partitions the array around a pivot using the Lomuto partition scheme (used in QuickSort).
+     * Elements less than or equal to the pivot are moved to the left, and greater elements to the right.
+     *
+     * @param arr The array to partition.
+     * @param low The starting index of the subarray.
+     * @param high The ending index of the subarray.
+     * @return The final index of the pivot element.
+     * @throws IllegalArgumentException if array is null or indices are invalid.
+     */
+    public static int partition(int[] arr, int low, int high) {
+        if (arr == null || low > high) {
+            throw new IllegalArgumentException("Invalid array or indices for partition.");
+        }
+
+        int pivot = arr[high]; // Choose the last element as the pivot
+        int i = (low - 1); // Index of the smaller element
+
+        for (int j = low; j < high; j++) {
+            // If current element is smaller than or equal to pivot
+            if (arr[j] <= pivot) {
+                i++;
+                // Swap arr[i] and arr[j]
+                swap(arr, i, j);
+            }
+        }
+
+        // Swap arr[i+1] (the first element greater than pivot) and arr[high] (pivot)
+        swap(arr, i + 1, high);
+
+        return i + 1;
+    }
+
+    /**
+     * Rotates the array to the right by k steps. The operation is performed in-place.
+     * Uses the three-reverse approach (Reverse all, reverse first k, reverse remaining n-k).
+     *
+     * @param arr The array to rotate.
+     * @param k The number of steps to rotate to the right.
+     */
+    public static void rotate(int[] arr, int k) {
+        if (arr == null || arr.length == 0 || k < 0) {
+            return;
+        }
+
+        int n = arr.length;
+        k = k % n; // Effective rotation steps
+
+        if (k == 0) return;
+
+        // 1. Reverse the entire array
+        reverse(arr, 0, n - 1); // e.g., 1,2,3,4,5 -> 5,4,3,2,1
+
+        // 2. Reverse the first k elements
+        reverse(arr, 0, k - 1); // e.g., k=2: 5,4,3,2,1 -> 4,5,3,2,1
+
+        // 3. Reverse the remaining n-k elements
+        reverse(arr, k, n - 1); // e.g., 4,5,3,2,1 -> 4,5,1,2,3
+    }
+
+    /**
+     * Checks if two sorted arrays contain any common elements (i.e., finds intersection).
+     * Uses the two-pointer technique for O(N+M) time complexity.
+     *
+     * @param arr1 The first sorted array.
+     * @param arr2 The second sorted array.
+     * @return true if there is at least one common element, false otherwise.
+     */
+    public static boolean hasIntersection(int[] arr1, int[] arr2) {
+        if (arr1 == null || arr2 == null || arr1.length == 0 || arr2.length == 0) {
+            return false;
+        }
+
+        int i = 0; // Pointer for arr1
+        int j = 0; // Pointer for arr2
+
+        while (i < arr1.length && j < arr2.length) {
+            if (arr1[i] == arr2[j]) {
+                return true; // Found an intersection
+            } else if (arr1[i] < arr2[j]) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the array is sorted in ascending order.
+     *
+     * @param arr The input array.
+     * @return true if the array is sorted, false otherwise.
+     */
+    public static boolean isSorted(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return true; // Null, empty, or single element array is considered sorted
+        }
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Finds the index of the first occurrence of a target value in a sorted array
+     * using Binary Search. Returns -1 if the target is not found.
+     *
+     * @param arr The sorted input array.
+     * @param target The value to search for.
+     * @return The index of the first target occurrence, or -1.
+     */
+    public static int binarySearchFirstOccurrence(int[] arr, int target) {
+        if (arr == null) {
+            return -1;
+        }
+
+        int low = 0;
+        int high = arr.length - 1;
+        int result = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == target) {
+                result = mid;       // Potential first occurrence found
+                high = mid - 1;     // Continue searching in the left half for an earlier occurrence
+            } else if (arr[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return result;
+    }
 }

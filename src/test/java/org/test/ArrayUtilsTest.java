@@ -369,4 +369,91 @@ public class ArrayUtilsTest {
         ArrayUtils.nextPermutation(actual);
         assertArrayEquals(new int[]{}, actual);
     }
+    @Test
+    @DisplayName("partition(): Should partition around the pivot (last element)")
+    void testPartitionStandard() {
+        int[] arr = new int[]{10, 80, 30, 90, 40, 50, 70};
+        int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1);
+
+        // Pivot should be at its correct sorted position (index 4 in this case, value 70)
+        assertEquals(4, pivotIndex);
+        assertEquals(70, arr[pivotIndex]);
+
+        // All elements to the left should be <= 70, all elements to the right should be > 70
+        for (int i = 0; i < pivotIndex; i++) {
+            assertTrue(arr[i] <= 70);
+        }
+        for (int i = pivotIndex + 1; i < arr.length; i++) {
+            assertTrue(arr[i] > 70);
+        }
+    }
+
+    @Test
+    @DisplayName("partition(): Should handle already sorted array")
+    void testPartitionSorted() {
+        int[] arr = new int[]{10, 20, 30, 40, 50};
+        int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1); // Pivot is 50
+        assertEquals(4, pivotIndex);
+        assertArrayEquals(new int[]{10, 20, 30, 40, 50}, arr);
+    }
+
+    @Test
+    @DisplayName("rotate(): Should rotate array to the right by 3 steps")
+    void testRotateRightStandard() {
+        int[] actual = new int[]{1, 2, 3, 4, 5, 6, 7};
+        int[] expected = new int[]{5, 6, 7, 1, 2, 3, 4};
+        ArrayUtils.rotate(actual, 3);
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("rotate(): Should handle rotation greater than array length")
+    void testRotateRightWrapAround() {
+        int[] actual = new int[]{1, 2, 3};
+        int[] expected = new int[]{3, 1, 2}; // k=4 is same as k=1
+        ArrayUtils.rotate(actual, 4);
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("hasIntersection(): Should return true for intersecting sorted arrays")
+    void testHasIntersectionTrue() {
+        int[] arr1 = new int[]{1, 3, 5, 7, 9};
+        int[] arr2 = new int[]{2, 4, 5, 6, 8};
+        assertTrue(ArrayUtils.hasIntersection(arr1, arr2));
+    }
+
+    @Test
+    @DisplayName("hasIntersection(): Should return false for non-intersecting sorted arrays")
+    void testHasIntersectionFalse() {
+        int[] arr1 = new int[]{1, 3, 5};
+        int[] arr2 = new int[]{2, 4, 6};
+        assertFalse(ArrayUtils.hasIntersection(arr1, arr2));
+    }
+
+    @Test
+    @DisplayName("isSorted(): Should return true for an ascending sorted array")
+    void testIsSortedTrue() {
+        assertTrue(ArrayUtils.isSorted(new int[]{1, 2, 2, 3, 5}));
+    }
+
+    @Test
+    @DisplayName("isSorted(): Should return false for an unsorted array")
+    void testIsSortedFalse() {
+        assertFalse(ArrayUtils.isSorted(new int[]{1, 5, 2, 8}));
+    }
+
+    @Test
+    @DisplayName("binarySearchFirstOccurrence(): Should find the first index of duplicates")
+    void testBinarySearchFirstOccurrenceDuplicates() {
+        int[] arr = new int[]{1, 3, 3, 3, 5, 7};
+        assertEquals(1, ArrayUtils.binarySearchFirstOccurrence(arr, 3));
+    }
+
+    @Test
+    @DisplayName("binarySearchFirstOccurrence(): Should return -1 if target is not found")
+    void testBinarySearchFirstOccurrenceNotFound() {
+        int[] arr = new int[]{1, 3, 5, 7, 9};
+        assertEquals(-1, ArrayUtils.binarySearchFirstOccurrence(arr, 4));
+    }
 }
