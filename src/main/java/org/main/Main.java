@@ -4,7 +4,8 @@ import java.util.*;
 
 import org.utils.ArrayUtils;
 import org.utils.StringUtils;
-import org.utils.GraphUtils; // New Import
+import org.utils.GraphUtils;
+import org.utils.DPUtils;
 
 /**
  * Main application class providing a menu-driven interface to test Array, String, and Graph utilities.
@@ -22,6 +23,7 @@ public class Main {
             try {
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
+                System.out.println();
 
                 switch (choice) {
                     // ArrayUtils Functions (1-12)
@@ -64,6 +66,17 @@ public class Main {
                     case 33: getShortestPathDijkstra(); break;
                     case 34: getIsSinkNode(); break;
                     case 35: getComputeIndegrees(); break;
+
+                    // DPUtils Functions (36-43)
+                    case 36: getCountSubsetsWithSumK(); break;
+                    case 37: getCountPartitionsWithGivenDifference(); break;
+                    case 38: getMaxSumNonAdjacent(); break;
+                    case 39: getLongestCommonSubsequence(); break;
+                    case 40: getLongestPalindromicSubsequence(); break;
+                    case 41: getLongestCommonSubstring(); break;
+                    case 42: getMinInsertionsToMakePalindrome(); break;
+                    case 43: getLongestIncreasingSubsequence(); break;
+                    case 44: getMinPathSum(); break;
 
                     case 0:
                         running = false;
@@ -159,7 +172,11 @@ public class Main {
         System.out.println("---------------------------------------------------");
         System.out.println("Graph Utilities (26-35):");
         System.out.println("26. Shortest Path (BFS) | 27. DFS Traversal | 28. Contains Cycle (Undirected) | 29. Max Degree | 30. Topological Sort (Kahn's) | 31. Is Tree | 32. Count Connected Components | 33. Shortest Path (Dijkstra's) | 34. Is Sink Node | 35. Compute Indegrees");
+        System.out.println("---------------------------------------------------");
+        System.out.println("DP Utilities (36-44):");
+        System.out.println("36. Count Subsets Sum K | 37. Count Partitions Diff | 38. Max Sum Non-Adjacent | 39. Longest Common Subsequence | 40. Longest Palindromic Subsequence | 41. Longest Common Substring | 42. Min Insertions Palindrome | 43. Longest Increasing Subsequence | 44. Min Path Sum (Grid)");
         System.out.println("0. Exit");
+        System.out.println("---------------------------------------------------");
         System.out.print("Enter choice: ");
     }
 
@@ -576,5 +593,109 @@ public class Main {
         List<List<Integer>> adj = readUnweightedGraph(numNodes);
         int[] indegrees = GraphUtils.computeIndegrees(adj, numNodes);
         System.out.printf("Indegree Array: %s\n", Arrays.toString(indegrees));
+    }
+
+    private static String readString(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    private static void getCountSubsetsWithSumK() {
+        int[] arr = readIntArray();
+        System.out.print("Enter target sum K: ");
+        int k = scanner.nextInt();
+        scanner.nextLine();
+        int count = DPUtils.countSubsetsWithSumK(arr, k);
+        System.out.println("Count of subsets with sum " + k + ": " + count);
+    }
+
+    private static void getCountPartitionsWithGivenDifference() {
+        int[] arr = readIntArray();
+        System.out.print("Enter required difference (S1_sum - S2_sum): ");
+        int diff = scanner.nextInt();
+        scanner.nextLine();
+        int count = DPUtils.countPartitionsWithGivenDifference(arr, diff);
+        System.out.println("Count of partitions with difference " + diff + ": " + count);
+    }
+
+    private static void getMaxSumNonAdjacent() {
+        int[] arr = readIntArray();
+        int maxSum = DPUtils.maxSumNonAdjacent(arr);
+        System.out.println("Maximum Non-Adjacent Sum: " + maxSum);
+    }
+
+    private static void getLongestCommonSubsequence() {
+        String s1 = readString("Enter string 1: ");
+        String s2 = readString("Enter string 2: ");
+        String lcs = DPUtils.longestCommonSubsequence(s1, s2);
+        System.out.println("Longest Common Subsequence (LCS): " + lcs + " (Length: " + lcs.length() + ")");
+    }
+
+    private static void getLongestPalindromicSubsequence() {
+        String s = readString("Enter string: ");
+        String lps = DPUtils.longestPalindromicSubsequence(s);
+        System.out.println("Longest Palindromic Subsequence (LPS): " + lps + " (Length: " + lps.length() + ")");
+    }
+
+    private static void getLongestCommonSubstring() {
+        String s1 = readString("Enter string 1: ");
+        String s2 = readString("Enter string 2: ");
+        String lcs = DPUtils.longestCommonSubstring(s1, s2);
+        System.out.println("Longest Common Substring: " + lcs + " (Length: " + lcs.length() + ")");
+    }
+
+    private static void getMinInsertionsToMakePalindrome() {
+        String s = readString("Enter string: ");
+        int minInsertions = DPUtils.minInsertionsToMakePalindrome(s);
+        System.out.println("Minimum insertions to make '" + s + "' a palindrome: " + minInsertions);
+    }
+
+    private static void getLongestIncreasingSubsequence() {
+        int[] arr = readIntArray();
+        List<Integer> lis = DPUtils.longestIncreasingSubsequence(arr);
+        System.out.println("Longest Increasing Subsequence (LIS): " + lis + " (Length: " + lis.size() + ")");
+    }
+
+    // Helper to read a 2D grid from user input
+    private static int[][] readGrid() {
+        System.out.print("Enter number of rows: ");
+        int rows = scanner.nextInt();
+        System.out.print("Enter number of columns: ");
+        int cols = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        int[][] grid = new int[rows][cols];
+        System.out.println("Enter grid values row by row (comma-separated):");
+        for (int i = 0; i < rows; i++) {
+            System.out.print("Row " + i + ": ");
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) {
+                System.out.println("Skipping empty row.");
+                continue;
+            }
+            String[] tokens = line.split(",");
+            if (tokens.length != cols) {
+                System.err.println("Error: Row " + i + " must have " + cols + " columns. Using default 0s.");
+                continue;
+            }
+            for (int j = 0; j < cols; j++) {
+                try {
+                    grid[i][j] = Integer.parseInt(tokens[j].trim());
+                } catch (NumberFormatException e) {
+                    System.err.println("Error: Invalid number format in cell (" + i + ", " + j + "). Using 0.");
+                    grid[i][j] = 0;
+                }
+            }
+        }
+        return grid;
+    }
+
+    private static void getMinPathSum() {
+        int[][] grid = readGrid();
+        // Create a copy because minPathSum modifies the grid in-place
+        int[][] gridCopy = Arrays.stream(grid).map(a -> Arrays.copyOf(a, a.length)).toArray(int[][]::new);
+
+        int minSum = DPUtils.minPathSum(gridCopy);
+        System.out.println("Minimum Path Sum (Top-Left to Bottom-Right): " + minSum);
     }
 }
