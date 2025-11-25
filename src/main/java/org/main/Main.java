@@ -6,6 +6,8 @@ import org.utils.ArrayUtils;
 import org.utils.StringUtils;
 import org.utils.GraphUtils;
 import org.utils.DPUtils;
+import org.utils.StackUtils;
+
 
 /**
  * Main application class providing a menu-driven interface to test Array, String, and Graph utilities.
@@ -77,6 +79,18 @@ public class Main {
                     case 42: getMinInsertionsToMakePalindrome(); break;
                     case 43: getLongestIncreasingSubsequence(); break;
                     case 44: getMinPathSum(); break;
+
+                    // StackUtils Functions (45-54)
+                    case 45: getReverseStack(); break;
+                    case 46: getIsBalanced(); break;
+                    case 47: getSortStack(); break;
+                    case 48: getEvaluatePostfix(); break;
+                    case 49: getNextGreaterElement(); break;
+                    case 50: getLongestValidParentheses(); break;
+                    case 51: getInfixToPostfix(); break;
+                    case 52: findMiddleElement(); break;
+                    case 53: isPermutation(); break;
+                    case 54: removeAllOccurrences(); break;
 
                     case 0:
                         running = false;
@@ -175,6 +189,9 @@ public class Main {
         System.out.println("---------------------------------------------------");
         System.out.println("DP Utilities (36-44):");
         System.out.println("36. Count Subsets Sum K | 37. Count Partitions Diff | 38. Max Sum Non-Adjacent | 39. Longest Common Subsequence | 40. Longest Palindromic Subsequence | 41. Longest Common Substring | 42. Min Insertions Palindrome | 43. Longest Increasing Subsequence | 44. Min Path Sum (Grid)");
+        System.out.println("---------------------------------------------------");
+        System.out.println("Stack Utilities (45-54):");
+        System.out.println("45. Reverse Stack | 46. Is Balanced | 47. Sort Stack | 48. Evaluate Postfix | 49. Next Greater Element | 50. Longest Valid Parentheses | 51. Infix to Postfix | 52. Find Middle | 53. Is Permutation | 54. Remove All Occurrences");
         System.out.println("0. Exit");
         System.out.println("---------------------------------------------------");
         System.out.print("Enter choice: ");
@@ -198,7 +215,38 @@ public class Main {
             return null;
         }
     }
+    /**
+     * Helper to read a stack from user input.
+     * Elements are entered space-separated, top-to-bottom order.
+     * The method reverses input order to push correctly (LIFO).
+     */
+    private static <T> Stack<T> readStack(Class<T> type) {
+        System.out.print("Enter stack elements (space-separated, top-to-bottom order): ");
+        String line = scanner.nextLine().trim();
+        if (line.isEmpty()) return new Stack<>();
 
+        Stack<T> stack = new Stack<>();
+
+        // Split input and reverse the list so we push from the bottom up.
+        List<String> elements = new ArrayList<>(Arrays.asList(line.split("\\s+")));
+        Collections.reverse(elements);
+
+        for (String element : elements) {
+            try {
+                if (type == Integer.class) {
+                    stack.push(type.cast(Integer.parseInt(element)));
+                } else if (type == String.class) {
+                    stack.push(type.cast(element));
+                } else {
+                    System.out.println("Unsupported stack type."); return new Stack<>();
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid element format: " + element);
+                return new Stack<>();
+            }
+        }
+        return stack;
+    }
     // --- ArrayUtils Method Implementations (1-7 Existing) ---
 
     private static void getMinMax() {
@@ -697,5 +745,89 @@ public class Main {
 
         int minSum = DPUtils.minPathSum(gridCopy);
         System.out.println("Minimum Path Sum (Top-Left to Bottom-Right): " + minSum);
+    }
+    // --- StackUtils Implementations (45-54) ---
+
+    private static void getReverseStack() {
+        Stack<Integer> stack = readStack(Integer.class);
+        if (stack.isEmpty()) return;
+        System.out.printf("Original (Bottom-to-Top): %s\n", stack);
+        StackUtils.reverseStack(stack);
+        System.out.printf("Reversed (Bottom-to-Top): %s\n", stack);
+    }
+
+    private static void getIsBalanced() {
+        System.out.print("Enter expression: ");
+        String expression = scanner.nextLine();
+        System.out.printf("Is Balanced? %s\n", StackUtils.isBalanced(expression));
+    }
+
+    private static void getSortStack() {
+        Stack<Integer> stack = readStack(Integer.class);
+        if (stack.isEmpty()) return;
+        System.out.printf("Original (Bottom-to-Top): %s\n", stack);
+        StackUtils.sortStack(stack);
+        System.out.printf("Sorted (Smallest at Bottom): %s\n", stack);
+    }
+
+    private static void getEvaluatePostfix() {
+        System.out.print("Enter postfix expression (e.g., 2 3 * 4 +): ");
+        String postfix = scanner.nextLine();
+        try {
+            System.out.printf("Result: %d\n", StackUtils.evaluatePostfix(postfix));
+        } catch (IllegalArgumentException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+    }
+
+    private static void getNextGreaterElement() {
+        int[] arr = readIntArray();
+        if (arr == null || arr.length == 0) return;
+        int[] result = StackUtils.nextGreaterElement(arr);
+        System.out.printf("Array: %s\n", Arrays.toString(arr));
+        System.out.printf("NGE: %s\n", Arrays.toString(result));
+    }
+
+    private static void getLongestValidParentheses() {
+        System.out.print("Enter string of parentheses: ");
+        String s = scanner.nextLine();
+        System.out.printf("Longest Valid Length: %d\n", StackUtils.longestValidParentheses(s));
+    }
+
+    private static void getInfixToPostfix() {
+        System.out.print("Enter infix expression (e.g., A + B * C): ");
+        String infix = scanner.nextLine();
+        System.out.printf("Postfix: %s\n", StackUtils.infixToPostfix(infix));
+    }
+
+    private static void findMiddleElement() {
+        Stack<Integer> stack = readStack(Integer.class);
+        if (stack.isEmpty()) return;
+        System.out.printf("Original (Bottom-to-Top): %s\n", stack);
+        Integer middle = StackUtils.findMiddleElement(stack);
+        System.out.printf("Middle Element: %d\n", middle);
+        System.out.printf("Stack Restored: %s\n", stack);
+    }
+
+    private static void isPermutation() {
+        System.out.println("Stack 1 (Top-to-Bottom order):");
+        Stack<String> s1 = readStack(String.class);
+        System.out.println("Stack 2 (Top-to-Bottom order):");
+        Stack<String> s2 = readStack(String.class);
+
+        // Since isPermutation destroys the stacks, we show the result once.
+        System.out.printf("Are Permutations? %s\n", StackUtils.isPermutation(s1, s2));
+        System.out.println("NOTE: Both stacks are destroyed in the process.");
+    }
+
+    private static void removeAllOccurrences() {
+        Stack<String> stack = readStack(String.class);
+        if (stack.isEmpty()) return;
+        System.out.print("Enter item to remove: ");
+        String item = scanner.nextLine();
+
+        System.out.printf("Original (Bottom-to-Top): %s\n", stack);
+        StackUtils.removeAllOccurrences(stack, item);
+        System.out.printf("After Removal (Bottom-to-Top): %s\n", stack);
     }
 }
