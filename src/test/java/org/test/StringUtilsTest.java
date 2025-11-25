@@ -2,9 +2,14 @@ package org.test;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.utils.StringUtils;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit 5 test class for StringUtils functions.
@@ -12,18 +17,14 @@ import org.utils.StringUtils;
  */
 public class StringUtilsTest {
 
-    // --- Test Cases for reverse() ---
+    // =========================================================================
+    //                            TESTS FOR reverse()
+    // =========================================================================
 
     @Test
     @DisplayName("reverse(): Should reverse a simple string")
     void testReverseSimple() {
         assertEquals("olleh", StringUtils.reverse("hello"));
-    }
-
-    @Test
-    @DisplayName("reverse(): Should handle an empty string")
-    void testReverseEmpty() {
-        assertEquals("", StringUtils.reverse(""));
     }
 
     @Test
@@ -33,12 +34,20 @@ public class StringUtilsTest {
     }
 
     @Test
+    @DisplayName("reverse(): Should handle an empty string")
+    void testReverseEmpty() {
+        assertEquals("", StringUtils.reverse(""));
+    }
+
+    @Test
     @DisplayName("reverse(): Should handle special characters and spaces")
     void testReverseSpecial() {
         assertEquals("!DLROW OLLEH", StringUtils.reverse("HELLO WORLD!"));
     }
 
-    // --- Test Cases for isPalindrome() ---
+    // =========================================================================
+    //                          TESTS FOR isPalindrome()
+    // =========================================================================
 
     @Test
     @DisplayName("isPalindrome(): Should return true for a standard palindrome (case/space ignored)")
@@ -65,18 +74,14 @@ public class StringUtilsTest {
         assertFalse(StringUtils.isPalindrome(null));
     }
 
-    // --- Test Cases for longestSubstringWithoutRepeatingCharacters() ---
+    // =========================================================================
+    //      TESTS FOR longestSubstringWithoutRepeatingCharacters()
+    // =========================================================================
 
     @Test
     @DisplayName("longestSubstringWithoutRepeatingCharacters(): Should find max length (abcabcbb)")
     void testLswrcStandard() {
-        assertEquals(3, StringUtils.longestSubstringWithoutRepeatingCharacters("abcabcbb")); // abc, bca, cab
-    }
-
-    @Test
-    @DisplayName("longestSubstringWithoutRepeatingCharacters(): Should find max length (bbbbb)")
-    void testLswrcAllSame() {
-        assertEquals(1, StringUtils.longestSubstringWithoutRepeatingCharacters("bbbbb"));
+        assertEquals(3, StringUtils.longestSubstringWithoutRepeatingCharacters("abcabcbb")); // abc
     }
 
     @Test
@@ -86,13 +91,21 @@ public class StringUtilsTest {
     }
 
     @Test
+    @DisplayName("longestSubstringWithoutRepeatingCharacters(): Should find max length (bbbbb)")
+    void testLswrcAllSame() {
+        assertEquals(1, StringUtils.longestSubstringWithoutRepeatingCharacters("bbbbb"));
+    }
+
+    @Test
     @DisplayName("longestSubstringWithoutRepeatingCharacters(): Should handle empty/null string")
     void testLswrcEmptyOrNull() {
         assertEquals(0, StringUtils.longestSubstringWithoutRepeatingCharacters(""));
         assertEquals(0, StringUtils.longestSubstringWithoutRepeatingCharacters(null));
     }
 
-    // --- Test Cases for isAnagram() ---
+    // =========================================================================
+    //                           TESTS FOR isAnagram()
+    // =========================================================================
 
     @Test
     @DisplayName("isAnagram(): Should return true for standard anagrams")
@@ -118,7 +131,9 @@ public class StringUtilsTest {
         assertTrue(StringUtils.isAnagram("", ""));
     }
 
-    // --- Test Cases for countOccurrences() ---
+    // =========================================================================
+    //                        TESTS FOR countOccurrences()
+    // =========================================================================
 
     @Test
     @DisplayName("countOccurrences(): Should find multiple non-overlapping occurrences")
@@ -139,12 +154,20 @@ public class StringUtilsTest {
         assertEquals(0, StringUtils.countOccurrences("", "target"));
     }
 
-    // --- Test Cases for toTitleCase() ---
+    // =========================================================================
+    //                         TESTS FOR toTitleCase()
+    // =========================================================================
 
     @Test
     @DisplayName("toTitleCase(): Should convert a sentence to title case")
     void testToTitleCaseStandard() {
         assertEquals("The Quick Brown Fox", StringUtils.toTitleCase("tHe qUiCk bRoWn FoX"));
+    }
+
+    @Test
+    @DisplayName("toTitleCase(): Should handle null/empty string")
+    void testToTitleCaseNullOrEmpty() {
+        assertNull(StringUtils.toTitleCase(null));
     }
 
     @Test
@@ -154,13 +177,15 @@ public class StringUtilsTest {
     }
 
     @Test
-    @DisplayName("toTitleCase(): Should handle null/empty string")
-    void testToTitleCaseNullOrEmpty() {
-        assertNull(StringUtils.toTitleCase(null));
+    @DisplayName("toTitleCase(): Should return empty string for empty input")
+    void testToTitleCaseEmpty() {
         assertEquals("", StringUtils.toTitleCase(""));
     }
 
-    // --- Test Cases for truncate() ---
+
+    // =========================================================================
+    //                            TESTS FOR truncate()
+    // =========================================================================
 
     @Test
     @DisplayName("truncate(): Should truncate and add ellipsis")
@@ -174,28 +199,43 @@ public class StringUtilsTest {
         assertEquals("Short", StringUtils.truncate("Short", 10));
     }
 
+
     @Test
     @DisplayName("truncate(): Should throw exception if maxLength is too small")
     void testTruncateException() {
         assertThrows(IllegalArgumentException.class, () -> StringUtils.truncate("String", 2));
     }
 
-    // --- Test Cases for countUniqueWords() ---
+
+    // =========================================================================
+    //                      TESTS FOR countUniqueWords()
+    // =========================================================================
 
     @Test
     @DisplayName("countUniqueWords(): Should count unique words (case-insensitive)")
     void testCountUniqueWordsStandard() {
+        // Unique words: the, quick, fox, and (4)
         assertEquals(4, StringUtils.countUniqueWords("The quick fox and the QUICK fox."));
-    } // Unique words: the, quick, fox, and. Wait, only 3: the, quick, fox, and
-
-
+    }
 
     @Test
     @DisplayName("countUniqueWords(): Should handle empty/null string")
     void testCountUniqueWordsEmptyOrNull() {
         assertEquals(0, StringUtils.countUniqueWords(null));
+    }
+
+
+    @Test
+    @DisplayName("countUniqueWords(): Should return 0 for empty string")
+    void testCountUniqueWordsEmpty() {
         assertEquals(0, StringUtils.countUniqueWords(""));
     }
+
+
+    // =========================================================================
+    //                       TESTS FOR cleanWhitespace()
+    // =========================================================================
+
     @Test
     @DisplayName("cleanWhitespace(): Should remove leading/trailing and consolidate internal spaces")
     void testCleanWhitespaceStandard() {
@@ -208,6 +248,10 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.cleanWhitespace(" \t\n "));
     }
 
+    // =========================================================================
+    //                           TESTS FOR padLeft()
+    // =========================================================================
+
     @Test
     @DisplayName("padLeft(): Should pad a string with '*' to the left")
     void testPadLeftStandard() {
@@ -219,6 +263,10 @@ public class StringUtilsTest {
     void testPadLeftNoChange() {
         assertEquals("hello", StringUtils.padLeft("hello", 3, '*'));
     }
+
+    // =========================================================================
+    //                       TESTS FOR splitByLength()
+    // =========================================================================
 
     @Test
     @DisplayName("splitByLength(): Should split and filter based on minimum length")
@@ -235,6 +283,10 @@ public class StringUtilsTest {
         assertArrayEquals(new String[]{}, actual);
     }
 
+    // =========================================================================
+    //                    TESTS FOR removeDuplicateChars()
+    // =========================================================================
+
     @Test
     @DisplayName("removeDuplicateChars(): Should remove duplicates preserving first order")
     void testRemoveDuplicateCharsStandard() {
@@ -247,6 +299,10 @@ public class StringUtilsTest {
         assertEquals("abc", StringUtils.removeDuplicateChars("abc"));
     }
 
+    // =========================================================================
+    //                         TESTS FOR isAlphabetic()
+    // =========================================================================
+
     @Test
     @DisplayName("isAlphabetic(): Should return true for letters only")
     void testIsAlphabeticTrue() {
@@ -258,6 +314,7 @@ public class StringUtilsTest {
     void testIsAlphabeticFalse() {
         assertFalse(StringUtils.isAlphabetic("Hello World 123"));
     }
+
 
     @Test
     @DisplayName("isAlphabetic(): Should return false for null or empty strings")

@@ -2,10 +2,13 @@ package org.test;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import java.util.Arrays;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.utils.ArrayUtils;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit 5 test class for ArrayUtils functions.
@@ -13,7 +16,9 @@ import org.utils.ArrayUtils;
  */
 public class ArrayUtilsTest {
 
-    // --- Test Cases for min() ---
+    // =========================================================================
+    //                            TESTS FOR min()
+    // =========================================================================
 
     @Test
     @DisplayName("min(): Should find the minimum value in an array of positive integers")
@@ -57,7 +62,9 @@ public class ArrayUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> ArrayUtils.min(null));
     }
 
-    // --- Test Cases for max() ---
+    // =========================================================================
+    //                            TESTS FOR max()
+    // =========================================================================
 
     @Test
     @DisplayName("max(): Should find the maximum value in an array of positive integers")
@@ -95,7 +102,9 @@ public class ArrayUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> ArrayUtils.max(null));
     }
 
-    // --- Test Cases for mergeSort() ---
+    // =========================================================================
+    //                          TESTS FOR mergeSort()
+    // =========================================================================
 
     @Test
     @DisplayName("mergeSort(): Should correctly sort a mixed array")
@@ -158,12 +167,27 @@ public class ArrayUtilsTest {
         assertArrayEquals(new int[]{42}, actual);
     }
 
-    // --- Test Cases for twoSumUniquePairs() ---
+    @Test
+    @DisplayName("mergeSort(): Should handle null array gracefully and not throw exception")
+    void testMergeSortNullArray() {
+        // Expected behavior: Method should handle null array without throwing a NullPointerException.
+        ArrayUtils.mergeSort(null);
+    }
+
+    // =========================================================================
+    //                      TESTS FOR twoSumUniquePairs()
+    // =========================================================================
 
     @Test
     @DisplayName("twoSumUniquePairs(): Should find correct count with no duplicates")
     void testTwoSumUniquePairsNoDuplicates() {
         assertEquals(2, ArrayUtils.twoSumUniquePairs(new int[]{1, 5, 2, 4, 3}, 6)); // (1, 5), (2, 4)
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should correctly count one unique pair with many duplicates on both sides")
+    void testTwoSumUniquePairsHeavyDuplicates() {
+        assertEquals(1, ArrayUtils.twoSumUniquePairs(new int[]{2, 2, 2, 5, 5, 5}, 7)); // Only (2, 5)
     }
 
     @Test
@@ -202,7 +226,50 @@ public class ArrayUtilsTest {
         assertEquals(0, ArrayUtils.twoSumUniquePairs(new int[]{5}, 10));
     }
 
-    // --- Test Cases for majorityElement() ---
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should handle array length exactly 2 with a matching pair")
+    void testTwoSumUniquePairsSizeTwoMatch() {
+        assertEquals(1, ArrayUtils.twoSumUniquePairs(new int[]{1, 5}, 6));
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should return 0 for array length exactly 1")
+    void testTwoSumUniquePairsSizeOne() {
+        assertEquals(0, ArrayUtils.twoSumUniquePairs(new int[]{1}, 2));
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should return 0 when the input array is null")
+    void testTwoSumUniquePairsNullArray() {
+        assertEquals(0, ArrayUtils.twoSumUniquePairs(null, 10));
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should correctly skip duplicates from right up to the next unique number")
+    void testTwoSumUniquePairsComplexDuplicates() {
+        int[] arr = new int[]{1, 1, 3, 3, 3, 5, 5, 5, 7, 7, 7, 9};
+        // Target 10. Pairs: (1, 9), (3, 7), (5, 5). Total 3.
+        assertEquals(3, ArrayUtils.twoSumUniquePairs(arr, 10));
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should correctly move left pointer when sum is too small")
+    void testTwoSumUniquePairsSumTooSmall() {
+        int[] arr = new int[]{1, 2, 8, 9};
+        // Target 11. Initial (1, 9) sum 10. Should move left++ (1 < 11).
+        assertEquals(1, ArrayUtils.twoSumUniquePairs(arr, 11)); // Only (2, 9) is not possible as 9 is skipped from right.
+    }
+
+    @Test
+    @DisplayName("twoSumUniquePairs(): Should correctly enter match block when sum equals target")
+    void testTwoSumUniquePairsBoundaryMatch() {
+        int[] arr = new int[]{1, 9};
+        assertEquals(1, ArrayUtils.twoSumUniquePairs(arr, 10));
+    }
+
+    // =========================================================================
+    //                        TESTS FOR majorityElement()
+    // =========================================================================
 
     @Test
     @DisplayName("majorityElement(): Should find the majority element (over 1/2)")
@@ -234,7 +301,9 @@ public class ArrayUtilsTest {
         assertEquals(42, ArrayUtils.majorityElement(new int[]{42}));
     }
 
-    // --- Test Cases for longestSubarrayWithSum() ---
+    // =========================================================================
+    //                   TESTS FOR longestSubarrayWithSum()
+    // =========================================================================
 
     @Test
     @DisplayName("longestSubarrayWithSum(): Should find the longest subarray with a positive sum")
@@ -245,14 +314,15 @@ public class ArrayUtilsTest {
     @Test
     @DisplayName("longestSubarrayWithSum(): Should handle mixed positive/negative numbers")
     void testLongestSubarrayWithSumMixed() {
-        assertEquals(4, ArrayUtils.longestSubarrayWithSum(new int[]{1, 2, -3, 3, 1, 2, 1, -2}, 3)); // [3, 1, 2, 1, -2] (sum 5-2) or [2, -3, 3, 1]
+        // Longest for sum 3 is [2, -3, 3, 1] (length 4) or [3, 1, 2, 1, -2] (length 5, sum 5-2 = 3).
+        assertEquals(4, ArrayUtils.longestSubarrayWithSum(new int[]{1, 2, -3, 3, 1, 2, 1, -2}, 3));
     }
 
     @Test
     @DisplayName("longestSubarrayWithSum(): Should handle a sum of zero")
     void testLongestSubarrayWithSumZero() {
-        assertEquals(6, ArrayUtils.longestSubarrayWithSum(new int[]{1, 2, -3, 4, -4, 0, 5}, 0)); // [4, -4, 0, 5] (start index 3, sum=5, end index 6) -> sum 0 from index 2 to 6. Length 5? No, from index 3 to 5 is [4, -4, 0]. Length 3.
-        // Actual longest: [2, -3, 1] length 3, or [4, -4, 0] length 3.
+        // [2, -3, 1] length 3, or [4, -4, 0] length 3, or [1, 2, -3] length 3
+        assertEquals(6, ArrayUtils.longestSubarrayWithSum(new int[]{1, 2, -3, 4, -4, 0, 5}, 0));
     }
 
     @Test
@@ -267,7 +337,15 @@ public class ArrayUtilsTest {
         assertEquals(0, ArrayUtils.longestSubarrayWithSum(new int[]{}, 5));
     }
 
-    // --- Test Cases for maxProductSubarray() ---
+    @Test
+    @DisplayName("longestSubarrayWithSum(): Should return 0 when the input array is null")
+    void testLongestSubarrayWithSumNullArray() {
+        assertEquals(0, ArrayUtils.longestSubarrayWithSum(null, 10));
+    }
+
+    // =========================================================================
+    //                    TESTS FOR maxProductSubarray()
+    // =========================================================================
 
     @Test
     @DisplayName("maxProductSubarray(): Should find max product in positive array")
@@ -278,13 +356,13 @@ public class ArrayUtilsTest {
     @Test
     @DisplayName("maxProductSubarray(): Should handle negative numbers (even count)")
     void testMaxProductSubarrayEvenNegatives() {
-        assertEquals(144, ArrayUtils.maxProductSubarray(new int[]{2, 3, -2, 4, -3})); // 2*3*(-2)*4*(-3) = 144. Max is [2, 3, -2, 4, -3] but contiguous? [2, 3, -2, 4] = -48. Max is [-2, 4, -3] = 24. Max is [2, 3, -2, 4, -3]? No. The max product is from [4, -3] or [2, 3, -2, 4, -3] no.
+        assertEquals(144, ArrayUtils.maxProductSubarray(new int[]{2, 3, -2, 4, -3})); // 2*3*(-2)*4*(-3) = 144
     }
 
     @Test
     @DisplayName("maxProductSubarray(): Should handle negative numbers (odd count) and zeros")
     void testMaxProductSubarrayOddNegativesAndZeros() {
-        assertEquals(64, ArrayUtils.maxProductSubarray(new int[]{-1, 6, 0, -8, 2, 1, -2, 2})); // Max is 8 from [2, 1, -2, 2] no, from [-8, 2, 1, -2] = 32. Max is 32.
+        assertEquals(64, ArrayUtils.maxProductSubarray(new int[]{-1, 6, 0, -8, 2, 1, -2, 2})); // [-8, 2, 1, -2] = 32
     }
 
     @Test
@@ -306,7 +384,9 @@ public class ArrayUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> ArrayUtils.maxProductSubarray(new int[]{}));
     }
 
-    // --- Test Cases for nextPermutation() ---
+    // =========================================================================
+    //                        TESTS FOR nextPermutation()
+    // =========================================================================
 
     @Test
     @DisplayName("nextPermutation(): Should find the next permutation (standard case)")
@@ -318,10 +398,10 @@ public class ArrayUtilsTest {
     }
 
     @Test
-    @DisplayName("nextPermutation(): Should correctly increment the middle digit")
-    void testNextPermutationMiddleIncrement() {
+    @DisplayName("nextPermutation(): Should correctly wrap around from last to first permutation")
+    void testNextPermutationLastToFirst() {
         int[] actual = new int[]{3, 2, 1};
-        int[] expected = new int[]{1, 2, 3}; // Last permutation becomes first
+        int[] expected = new int[]{1, 2, 3};
         ArrayUtils.nextPermutation(actual);
         assertArrayEquals(expected, actual);
     }
@@ -369,17 +449,20 @@ public class ArrayUtilsTest {
         ArrayUtils.nextPermutation(actual);
         assertArrayEquals(new int[]{}, actual);
     }
+
+    // =========================================================================
+    //                          TESTS FOR partition()
+    // =========================================================================
+
     @Test
     @DisplayName("partition(): Should partition around the pivot (last element)")
     void testPartitionStandard() {
         int[] arr = new int[]{10, 80, 30, 90, 40, 50, 70};
         int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1);
 
-        // Pivot should be at its correct sorted position (index 4 in this case, value 70)
         assertEquals(4, pivotIndex);
         assertEquals(70, arr[pivotIndex]);
 
-        // All elements to the left should be <= 70, all elements to the right should be > 70
         for (int i = 0; i < pivotIndex; i++) {
             assertTrue(arr[i] <= 70);
         }
@@ -392,10 +475,19 @@ public class ArrayUtilsTest {
     @DisplayName("partition(): Should handle already sorted array")
     void testPartitionSorted() {
         int[] arr = new int[]{10, 20, 30, 40, 50};
-        int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1); // Pivot is 50
+        int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1);
         assertEquals(4, pivotIndex);
+        // The array might be rearranged internally, but for a sorted array,
+        // the pivot (50) should still end up at the end.
+        // A weaker assertion is used here since the goal is to uncomment.
+        // If the implementation is standard QuickSort partition:
+        // Expected array after partition: {10, 20, 30, 40, 50}
         assertArrayEquals(new int[]{10, 20, 30, 40, 50}, arr);
     }
+
+    // =========================================================================
+    //                            TESTS FOR rotate()
+    // =========================================================================
 
     @Test
     @DisplayName("rotate(): Should rotate array to the right by 3 steps")
@@ -410,10 +502,20 @@ public class ArrayUtilsTest {
     @DisplayName("rotate(): Should handle rotation greater than array length")
     void testRotateRightWrapAround() {
         int[] actual = new int[]{1, 2, 3};
-        int[] expected = new int[]{3, 1, 2}; // k=4 is same as k=1
+        int[] expected = new int[]{3, 1, 2};
         ArrayUtils.rotate(actual, 4);
         assertArrayEquals(expected, actual);
     }
+
+    @Test
+    @DisplayName("rotate(): Should handle null array gracefully and not throw exception")
+    void testRotateNullArray() {
+        ArrayUtils.rotate(null, 5);
+    }
+
+    // =========================================================================
+    //                        TESTS FOR hasIntersection()
+    // =========================================================================
 
     @Test
     @DisplayName("hasIntersection(): Should return true for intersecting sorted arrays")
@@ -431,6 +533,10 @@ public class ArrayUtilsTest {
         assertFalse(ArrayUtils.hasIntersection(arr1, arr2));
     }
 
+    // =========================================================================
+    //                           TESTS FOR isSorted()
+    // =========================================================================
+
     @Test
     @DisplayName("isSorted(): Should return true for an ascending sorted array")
     void testIsSortedTrue() {
@@ -442,6 +548,10 @@ public class ArrayUtilsTest {
     void testIsSortedFalse() {
         assertFalse(ArrayUtils.isSorted(new int[]{1, 5, 2, 8}));
     }
+
+    // =========================================================================
+    //                 TESTS FOR binarySearchFirstOccurrence()
+    // =========================================================================
 
     @Test
     @DisplayName("binarySearchFirstOccurrence(): Should find the first index of duplicates")
@@ -455,5 +565,11 @@ public class ArrayUtilsTest {
     void testBinarySearchFirstOccurrenceNotFound() {
         int[] arr = new int[]{1, 3, 5, 7, 9};
         assertEquals(-1, ArrayUtils.binarySearchFirstOccurrence(arr, 4));
+    }
+
+    @Test
+    @DisplayName("binarySearchFirstOccurrence(): Should return -1 when the input array is null")
+    void testBinarySearchFirstOccurrenceNullArray() {
+        assertEquals(-1, ArrayUtils.binarySearchFirstOccurrence(null, 5));
     }
 }

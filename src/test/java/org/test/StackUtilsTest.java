@@ -2,19 +2,32 @@ package org.test;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.utils.StackUtils;
+
 import java.util.Stack;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * JUnit 5 test class for StackUtils functions.
  */
 public class StackUtilsTest {
 
-    // Helper to check if a stack matches an expected list
+    // =========================================================================
+    //                              HELPER METHOD
+    // =========================================================================
+
+    /**
+     * Helper to check if a stack matches an expected list (from bottom to top).
+     * @param expectedArray The array representing the stack from bottom to top.
+     * @param actualStack The Stack object to check.
+     */
     private <T> void assertStackEquals(T[] expectedArray, Stack<T> actualStack) {
         // 1. Check if the sizes match.
         assertEquals(expectedArray.length, actualStack.size(), "Stack sizes must match.");
@@ -27,7 +40,9 @@ public class StackUtilsTest {
         }
     }
 
-    // --- Test Cases for reverseStack ---
+    // =========================================================================
+    //                         TESTS FOR reverseStack()
+    // =========================================================================
 
     @Test
     @DisplayName("reverseStack(): Should correctly reverse a stack of integers")
@@ -39,7 +54,7 @@ public class StackUtilsTest {
 
         StackUtils.reverseStack(stack); // Stack: [3, 2, 1] (1 on top)
 
-        assertStackEquals(new Integer[]{3, 2,1}, stack);
+        assertStackEquals(new Integer[]{3, 2, 1}, stack);
     }
 
     @Test
@@ -50,7 +65,9 @@ public class StackUtilsTest {
         assertTrue(stack.isEmpty());
     }
 
-    // --- Test Cases for isBalanced ---
+    // =========================================================================
+    //                          TESTS FOR isBalanced()
+    // =========================================================================
 
     @Test
     @DisplayName("isBalanced(): Should return true for a correctly balanced expression")
@@ -70,7 +87,9 @@ public class StackUtilsTest {
         assertTrue(StackUtils.isBalanced("a + (b * c)"));
     }
 
-    // --- Test Cases for sortStack ---
+    // =========================================================================
+    //                          TESTS FOR sortStack()
+    // =========================================================================
 
     @Test
     @DisplayName("sortStack(): Should correctly sort integers (smallest on top)")
@@ -81,7 +100,7 @@ public class StackUtilsTest {
         stack.push(18);
         stack.push(1); // Stack: [30, 5, 18, 1] (1 on top)
 
-        StackUtils.sortStack(stack); // Sorted: [30, 18, 5, 1] (30 on top, 1 on bottom)
+        StackUtils.sortStack(stack); // Sorted: [1, 5, 18, 30] (30 on top, 1 on bottom)
 
         assertStackEquals(new Integer[]{1, 5, 18, 30}, stack);
     }
@@ -97,7 +116,9 @@ public class StackUtilsTest {
         assertStackEquals(new Integer[]{1, 5, 10}, stack);
     }
 
-    // --- Test Cases for evaluatePostfix ---
+    // =========================================================================
+    //                        TESTS FOR evaluatePostfix()
+    // =========================================================================
 
     @Test
     @DisplayName("evaluatePostfix(): Should correctly evaluate a standard RPN expression")
@@ -108,7 +129,7 @@ public class StackUtilsTest {
     @Test
     @DisplayName("evaluatePostfix(): Should handle subtraction and division")
     void testEvaluatePostfixComplex() {
-        assertEquals(12, StackUtils.evaluatePostfix("10 2 / 3 * 8 - 5 +")); // ((10/2)*3 - 8) + 5 = (15 - 8) + 5 = 12. Wait: ((10/2)*3 - 8) + 5 = (5*3 - 8) + 5 = 7 + 5 = 12. Let's stick to simple: 10 2 / 3 * 8 - 5 + = 5 3 * 8 - 5 + = 15 8 - 5 + = 7 5 + = 12
+        assertEquals(12, StackUtils.evaluatePostfix("10 2 / 3 * 8 - 5 +")); // ((10/2)*3 - 8) + 5 = 12
     }
 
     @Test
@@ -117,7 +138,9 @@ public class StackUtilsTest {
         assertThrows(IllegalArgumentException.class, () -> StackUtils.evaluatePostfix("10 0 /"));
     }
 
-    // --- Test Cases for nextGreaterElement ---
+    // =========================================================================
+    //                       TESTS FOR nextGreaterElement()
+    // =========================================================================
 
     @Test
     @DisplayName("nextGreaterElement(): Should find the next greater element correctly")
@@ -131,11 +154,13 @@ public class StackUtilsTest {
     @DisplayName("nextGreaterElement(): Should handle no greater elements")
     void testNextGreaterElementDescending() {
         int[] arr = {13, 7, 6, 12};
-        int[] expected = {-1, 12, 12, -1}; // 12 > 7 and 12 > 6
+        int[] expected = {-1, 12, 12, -1};
         assertArrayEquals(expected, StackUtils.nextGreaterElement(arr));
     }
 
-    // --- Test Cases for longestValidParentheses ---
+    // =========================================================================
+    //                    TESTS FOR longestValidParentheses()
+    // =========================================================================
 
     @Test
     @DisplayName("longestValidParentheses(): Should find max length for standard balanced string")
@@ -147,10 +172,17 @@ public class StackUtilsTest {
     @DisplayName("longestValidParentheses(): Should find max length for complex string with prefixes")
     void testLongestValidParenthesesComplex() {
         assertEquals(6, StackUtils.longestValidParentheses("((()))"));
+    }
+
+    @Test
+    @DisplayName("longestValidParentheses(): Should find max length for short invalid string")
+    void testLongestValidParenthesesShort() {
         assertEquals(2, StackUtils.longestValidParentheses("(()"));
     }
 
-    // --- Test Cases for infixToPostfix ---
+    // =========================================================================
+    //                        TESTS FOR infixToPostfix()
+    // =========================================================================
 
     @Test
     @DisplayName("infixToPostfix(): Should convert simple infix expression correctly")
@@ -164,7 +196,9 @@ public class StackUtilsTest {
         assertEquals("A B + C *", StackUtils.infixToPostfix("(A + B) * C"));
     }
 
-    // --- Test Cases for findMiddleElement ---
+    // =========================================================================
+    //                       TESTS FOR findMiddleElement()
+    // =========================================================================
 
     @Test
     @DisplayName("findMiddleElement(): Should find the middle element in an odd-sized stack")
@@ -176,7 +210,6 @@ public class StackUtilsTest {
 
         assertEquals("B", StackUtils.findMiddleElement(stack));
         assertFalse(stack.isEmpty(), "Stack should not be destroyed.");
-        assertEquals(3, stack.size(), "Stack size should be restored.");
     }
 
     @Test
@@ -188,11 +221,24 @@ public class StackUtilsTest {
         stack.push(30);
         stack.push(40); // Stack: [10, 20, 30, 40] (40 on top)
 
-        // Middle element is 20 (index 1) or 30 (index 2). We choose the element at index size/2 = 20
+        // Middle element is 30 (index 2: size/2)
         assertEquals(30, StackUtils.findMiddleElement(stack));
     }
 
-    // --- Test Cases for isPermutation ---
+    @Test
+    @DisplayName("findMiddleElement(): Should verify stack size is restored")
+    void testFindMiddleElementRestoresSize() {
+        Stack<String> stack = new Stack<>();
+        stack.push("A");
+        stack.push("B");
+        stack.push("C");
+        StackUtils.findMiddleElement(stack);
+        assertEquals(3, stack.size(), "Stack size should be restored.");
+    }
+
+    // =========================================================================
+    //                         TESTS FOR isPermutation()
+    // =========================================================================
 
     @Test
     @DisplayName("isPermutation(): Should return true for stacks with the same elements, different order (destroys stacks)")
@@ -203,8 +249,6 @@ public class StackUtilsTest {
         s2.push('B'); s2.push('A'); s2.push('A'); // [B, A, A]
 
         assertTrue(StackUtils.isPermutation(s1, s2));
-        assertTrue(s1.isEmpty());
-        assertTrue(s2.isEmpty());
     }
 
     @Test
@@ -218,7 +262,21 @@ public class StackUtilsTest {
         assertFalse(StackUtils.isPermutation(s1, s2));
     }
 
-    // --- Test Cases for removeAllOccurrences ---
+    @Test
+    @DisplayName("isPermutation(): Should verify stacks are empty after check")
+    void testIsPermutationStacksDestroyed() {
+        Stack<Character> s1 = new Stack<>();
+        s1.push('A'); s1.push('B'); s1.push('A');
+        Stack<Character> s2 = new Stack<>();
+        s2.push('B'); s2.push('A'); s2.push('A');
+        StackUtils.isPermutation(s1, s2);
+        assertTrue(s1.isEmpty());
+        assertTrue(s2.isEmpty());
+    }
+
+    // =========================================================================
+    //                     TESTS FOR removeAllOccurrences()
+    // =========================================================================
 
     @Test
     @DisplayName("removeAllOccurrences(): Should remove all target items while preserving order")
@@ -228,10 +286,9 @@ public class StackUtilsTest {
         stack.push("B");
         stack.push("C");
         stack.push("B");
-        stack.push("D"); // Stack: [A, B, C, B, D] (D on top)
+        stack.push("D"); // Original: [A, B, C, B, D]
 
-        StackUtils.removeAllOccurrences(stack, "B"); // Stack: [A, C, D] (D on top)
-
+        StackUtils.removeAllOccurrences(stack, "B"); // Result: [A, C, D]
 
         assertStackEquals(new String[]{"A", "C", "D"}, stack);
     }

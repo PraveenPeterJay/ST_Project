@@ -23,7 +23,7 @@ public class WebAppTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
-    private final String BASE_URL = "http://localhost:8081/index.html";
+    private final String BASE_URL = "http://localhost:8082/index.html";
 
     @BeforeEach
     public void setUp() {

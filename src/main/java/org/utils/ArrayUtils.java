@@ -147,7 +147,7 @@ public final class ArrayUtils {
      * @return The count of unique pairs that sum up to the target.
      */
     public static int twoSumUniquePairs(int[] arr, int target) {
-        if (arr == null || arr.length < 2) {
+        if (arr == null) {
             return 0;
         }
 

@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ApiLoadTest {
 
-    private static final String API_URL = "http://localhost:8081/api/execute";
-    private static final int CONCURRENT_USERS = 50; // Number of threads
-    private static final int REQUESTS_PER_USER = 100; // Requests per thread
+    private static final String API_URL = "http://localhost:8082/api/execute";
+    private static final int CONCURRENT_USERS = 10000; // Number of threads
+    private static final int REQUESTS_PER_USER = 1; // Requests per thread
     private static final int TOTAL_REQUESTS = CONCURRENT_USERS * REQUESTS_PER_USER;
 
     // A heavy payload to stress the CPU (Merge Sort on unsorted integers)

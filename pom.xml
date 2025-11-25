@@ -103,7 +103,11 @@
                     </targetClasses>
 
                     <targetTests>
-                        <param>org.test.*</param>
+                        <param>org.test.ArrayUtilsTest</param>
+                        <param>org.test.DPUtilsTest</param>
+                        <param>org.test.GraphUtilsTest</param>
+                        <param>org.test.StackUtilsTest</param>
+                        <param>org.test.StringUtilsTest</param>
                     </targetTests>
 
                     <mutationThreshold>80</mutationThreshold>
