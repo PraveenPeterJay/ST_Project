@@ -36,7 +36,6 @@ public class Main {
                     case 5: getLongestSubarrayWithSum(); break;
                     case 6: getMaxProductSubarray(); break;
                     case 7: getNextPermutation(); break;
-                    case 8: getPartition(); break;
                     case 9: getRotate(); break;
                     case 10: getHasIntersection(); break;
                     case 11: getIsSorted(); break;
@@ -49,7 +48,6 @@ public class Main {
                     case 16: getIsAnagram(); break;
                     case 17: getCountOccurrences(); break;
                     case 18: getToTitleCase(); break;
-                    case 19: getTruncateString(); break;
                     case 20: getCountUniqueWords(); break;
                     case 21: getCleanWhitespace(); break;
                     case 22: getPadLeft(); break;
@@ -346,19 +344,7 @@ public class Main {
 
     // --- ArrayUtils Method Implementations (8-12 New) ---
 
-    private static void getPartition() {
-        int[] arr = readIntArray();
-        if (arr == null || arr.length == 0) return;
 
-        try {
-            System.out.printf("Original Array: %s\n", Arrays.toString(arr));
-            int pivotIndex = ArrayUtils.partition(arr, 0, arr.length - 1);
-            System.out.printf("Array after Partition: %s\n", Arrays.toString(arr));
-            System.out.printf("Pivot Element (%d) is at index: %d\n", arr[pivotIndex], pivotIndex);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Result: " + e.getMessage());
-        }
-    }
 
     private static void getRotate() {
         int[] arr = readIntArray();
@@ -465,28 +451,7 @@ public class Main {
         System.out.printf("Title Case: '%s'\n", titleCase);
     }
 
-    private static void getTruncateString() {
-        System.out.print("Enter a string to truncate: ");
-        String str = scanner.nextLine();
-        System.out.print("Enter max length (>=3): ");
-        int maxLength;
-        try {
-            maxLength = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-        } catch (InputMismatchException e) {
-            System.out.println("ERROR: Invalid length input.");
-            scanner.nextLine();
-            return;
-        }
 
-        try {
-            String truncated = StringUtils.truncate(str, maxLength);
-            System.out.printf("Original: '%s'\n", str);
-            System.out.printf("Truncated: '%s'\n", truncated);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Result: " + e.getMessage());
-        }
-    }
 
     private static void getCountUniqueWords() {
         System.out.print("Enter a sentence: ");

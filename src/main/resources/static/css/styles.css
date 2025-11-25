@@ -1,0 +1,38 @@
+:root {
+    --primary: #2563eb;
+    --bg: #f3f4f6;
+    --sidebar: #ffffff;
+    --text: #1f2937;
+}
+
+body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); }
+a { text-decoration: none; color: inherit; }
+
+/* Landing Page */
+.landing-container { max-width: 1000px; margin: 0 auto; text-align: center; padding-top: 50px; }
+.subtitle { color: #6b7280; margin-bottom: 40px; font-size: 1.2rem; }
+.category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+.card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: transform 0.2s; cursor: pointer; border-left: 5px solid transparent; }
+.card:hover { transform: translateY(-5px); }
+.array-card { border-color: #3b82f6; } .string-card { border-color: #10b981; }
+.graph-card { border-color: #f59e0b; } .dp-card { border-color: #8b5cf6; } .stack-card { border-color: #ec4899; }
+
+/* Category App Layout */
+.app-container { display: flex; height: 100vh; }
+.sidebar { width: 300px; background: white; border-right: 1px solid #e5e7eb; overflow-y: auto; display: flex; flex-direction: column; }
+.sidebar-header { padding: 20px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; }
+.back-link { font-size: 0.9rem; color: #6b7280; display: block; margin-bottom: 10px; }
+.function-list { list-style: none; padding: 0; margin: 0; }
+.function-list li { padding: 15px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; transition: background 0.1s; }
+.function-list li:hover { background: #eff6ff; }
+.function-list li.active { background: #dbeafe; border-left: 4px solid var(--primary); font-weight: bold; }
+
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+.workspace { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto; }
+.input-group { margin: 20px 0; }
+.input-wrapper { margin-bottom: 15px; }
+.input-wrapper label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+.input-wrapper input, .input-wrapper textarea { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; }
+.run-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 1rem; width: 100%; }
+.run-btn:hover { background: #1d4ed8; }
+.output-box { margin-top: 25px; background: #111827; color: #10b981; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Utility Functions</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="back-link">← Back</a>
+            <h2 id="category-title">Utils</h2>
+        </div>
+        <ul id="function-list" class="function-list">
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div id="welcome-message" class="workspace-placeholder">
+            <h3>Select a function from the left to test.</h3>
+        </div>
+
+        <div id="function-workspace" class="workspace" style="display: none;">
+            <h2 id="func-name">Function Name</h2>
+            <p id="func-desc">Description goes here.</p>
+
+            <div class="input-group" id="input-container">
+            </div>
+
+            <button id="run-btn" class="run-btn">Execute Function</button>
+
+            <div class="output-box">
+                <h4>Output:</h4>
+                <pre id="output-area">Waiting for input...</pre>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>
